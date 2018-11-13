@@ -1,12 +1,19 @@
 from PIL import Image
-import sys
+import sys, argparse
 
-N = int(sys.argv[1])
+parser = argparse.ArgumentParser(description="Turn a number into an image. Number must be less than 256^(width * height * 3) - 1")
+parser.add_argument("--n", required=True, type=int)
+parser.add_argument("--imgout", required=True, metavar="/path/to/image.xxx", type=str)
+parser.add_argument("--width", required=True, type=int)
+parser.add_argument("--height", required=True, type=int)
+args = parser.parse_args()
+
+N = args.n
 
 
 
 # Size of image in normal dimensions (width, height)
-IMAGE_SIZE = (10,10)
+IMAGE_SIZE = (args.width, args.height)
 # Size of image in a 1-D array which is width * hight * 3
 # * 3 because each color channel needs its own spot
 IMAGE_LENGTH = IMAGE_SIZE[0] * IMAGE_SIZE[1] * 3
@@ -51,7 +58,7 @@ img = Image.new("RGB", IMAGE_SIZE)
 
 img.putdata(grouped)
 
-img.save("img.png")
+img.save(args.imgout)
 
 
 

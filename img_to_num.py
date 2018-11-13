@@ -1,5 +1,8 @@
 from PIL import Image
-import sys
+import sys, argparse
+
+
+
 
 def convert_base_10(array, base):
     n = 0
@@ -36,14 +39,22 @@ def get_sig_block(pixels):
 
     return list(reversed(number))
 
+parser = argparse.ArgumentParser(description="Turn an image into a number")
+parser.add_argument("--path", help='Path to the image', required=True)
+parser.add_argument("--out", help='File to write the number out to', required=False)
+args = parser.parse_args()
 
-path = sys.argv[1]
+path = args.path
+
 
 img = Image.open(path)
 
 pixels = img.getdata()
-
-print(convert_base_10(get_sig_block(pixels), 256))
+if args.out:
+    with open(args.out, 'w') as out:
+        out.write(str(convert_base_10(get_sig_block(pixels), 256)))
+else:
+    print(convert_base_10(get_sig_block(pixels), 256))
 
 
 
